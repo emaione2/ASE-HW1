@@ -804,3 +804,102 @@ class TestApp(unittest.TestCase):
             "total_questions": 3
         }
         )
+
+    def test3(self):  # /quiz
+        app = tested_app.test_client()
+
+        reply = app.post('/quizzes',
+                         data=json.dumps({
+                             "questions": [
+                                 {
+                                     "question": "What's the answer to all questions?",
+                                     "answers": [
+                                         {
+                                             "answer": "33",
+                                             "correct": 0
+                                         },
+                                         {
+                                             "answer": "42",
+                                             "correct": 1
+                                         },
+                                         {
+                                             "answer": "1",
+                                             "correct": 0
+                                         }
+                                     ]
+                                 },
+                                 {
+                                     "question": "What's the answer to all questions?",
+                                     "answers": [
+                                         {
+                                             "answer": "33",
+                                             "correct": 0
+                                         },
+                                         {
+                                             "answer": "42",
+                                             "correct": 1
+                                         },
+                                         {
+                                             "answer": "1",
+                                             "correct": 0
+                                         }
+                                     ]
+                                 }
+                             ]
+                         }),
+                         content_type='application/json')
+
+        body = json.loads(str(reply.data, 'utf8'))
+
+        id = body['quiznumber']
+
+        reply = app.delete('/quiz/'+str(id))
+
+        reply = app.post('/quizzes',
+                         data=json.dumps({
+                             "questions": [
+                                 {
+                                     "question": "What's the answer to all questions?",
+                                     "answers": [
+                                         {
+                                             "answer": "33",
+                                             "correct": 0
+                                         },
+                                         {
+                                             "answer": "42",
+                                             "correct": 1
+                                         },
+                                         {
+                                             "answer": "1",
+                                             "correct": 0
+                                         }
+                                     ]
+                                 },
+                                 {
+                                     "question": "What's the answer to all questions?",
+                                     "answers": [
+                                         {
+                                             "answer": "33",
+                                             "correct": 0
+                                         },
+                                         {
+                                             "answer": "42",
+                                             "correct": 1
+                                         },
+                                         {
+                                             "answer": "1",
+                                             "correct": 0
+                                         }
+                                     ]
+                                 }
+                             ]
+                         }),
+                         content_type='application/json')
+
+        body = json.loads(str(reply.data, 'utf8'))
+
+        id_new = body['quiznumber']
+
+        self.assertLess(id, id_new, 'message')
+
+        print('' + str(id) + ' < ' + str(id_new))
