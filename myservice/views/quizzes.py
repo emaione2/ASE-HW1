@@ -17,31 +17,24 @@ def all_quizzes():
         result = get_all_quizzes(request)
     return result
 
-# TODO: complete the decoration
 @quizzes.route("/quizzes/loaded", methods=['GET'])
 def loaded_quizzes():  # returns the number of quizzes currently loaded in the system
-    # TODO: Return the correct number
     return jsonify(loaded_quizzes=len(_LOADED_QUIZZES))
     # return {'loaded_quizzes': _QUIZNUMBER}
 
 
-# TODO: complete the decoration
 @quizzes.route("/quiz/<id>", methods=['GET', 'DELETE'])
 def single_quiz(id):
     global _LOADED_QUIZZES
     result = ""
 
-    # TODO: check if the quiz is an existing one
     exists_quiz(id=id)
 
     if 'GET' == request.method:  
-        # TODO: retrieve a quiz <id>
         quiz = _LOADED_QUIZZES[id]
         result = jsonify(quiz.serialize())
 
     elif 'DELETE' == request.method:
-        # TODO: delete a quiz and get back number of answered questions
-        # and total number of questions
         quiz = _LOADED_QUIZZES.pop(id)
 
         answered = quiz.currentQuestion
@@ -52,18 +45,15 @@ def single_quiz(id):
     return result
 
 
-# TODO: complete the decoration
 @quizzes.route("/quiz/<id>/question", methods=['GET'])
 def play_quiz(id):
     global _LOADED_QUIZZES
     result = ""
 
-    # TODO: check if the quiz is an existing one
     exists_quiz(id=id)
     quiz: Quiz = _LOADED_QUIZZES[id]
 
     if 'GET' == request.method:  
-        # TODO: retrieve next question in a quiz, handle exceptions
         try:
             result = quiz.getQuestion()
         except LostQuizError:
@@ -74,16 +64,13 @@ def play_quiz(id):
     return result
 
 
-# TODO: complete the decoration
 @quizzes.route("/quiz/<id>/question/<answer>", methods=['PUT'])
 def answer_question(id, answer):
     global _LOADED_QUIZZES
 
-    # TODO: check if the quiz is an existing one
     exists_quiz(id=id)
     quiz: Quiz = _LOADED_QUIZZES[id]
     
-    # TODO: check if quiz is lost or completed and act consequently
     try:
         quiz.isOpen()
     except CompletedQuizError:
@@ -93,7 +80,6 @@ def answer_question(id, answer):
 
     if 'PUT' == request.method:
 
-        # TODO: Check answers and handle exceptions
         result = ''
         try:
             result = quiz.checkAnswer(givenAnswer=answer)
